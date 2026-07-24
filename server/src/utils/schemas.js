@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { EVENT_TYPES } from '../models/Event.js';
+import { SERVICE_TYPES } from '../models/Service.js';
 import { DELIVERABLE_TYPES, DELIVERABLE_STATUSES } from '../models/Deliverable.js';
 import { PAYMENT_METHODS } from '../models/Payment.js';
 import { EXPENSE_CATEGORIES } from '../models/Expense.js';
@@ -19,7 +20,11 @@ export const customerSchema = z.object({
   address: z.string().optional(),
 });
 
-export const customerUpdateSchema = customerSchema.partial();
+export const customerUpdateSchema = customerSchema.partial().extend({
+  services: z.array(z.enum(SERVICE_TYPES)).optional(),
+  deliverables: z.array(z.enum(DELIVERABLE_TYPES)).optional(),
+  deliverableNotes: z.string().optional(),
+});
 
 export const eventSchema = z.object({
   customer: z.string(),
@@ -58,6 +63,9 @@ export const expenseSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const paymentUpdateSchema = paymentSchema.omit({ customer: true }).partial();
+export const expenseUpdateSchema = expenseSchema.omit({ customer: true }).partial();
+
 export const bookingSchema = z.object({
   customer: z.object({
     customerName: z.string().min(1),
@@ -70,10 +78,7 @@ export const bookingSchema = z.object({
     packageAmount: z.coerce.number().min(0),
   }),
   events: z.array(eventSchema.omit({ customer: true })).default([]),
-  services: z.array(z.enum([
-    'Photography', 'Videography', 'Candid', 'Drone', 'Cinematic', 'Traditional Video',
-    'Live Streaming', 'Album', 'Frame', 'LED', 'Reel', 'Pre Wedding', 'Other',
-  ])).default([]),
+  services: z.array(z.enum(SERVICE_TYPES)).default([]),
   deliverables: z.array(z.enum(DELIVERABLE_TYPES)).default([]),
   deliverableNotes: z.string().optional(),
   payments: z.array(paymentSchema.omit({ customer: true })).default([]),

@@ -9,7 +9,9 @@ import {
   eventSchema,
   eventUpdateSchema,
   paymentSchema,
+  paymentUpdateSchema,
   expenseSchema,
+  expenseUpdateSchema,
 } from '../utils/schemas.js';
 
 const router = Router();
@@ -21,15 +23,15 @@ router.patch('/events/:id', validate(eventUpdateSchema), updateEvent);
 router.delete('/events/:id', deleteEvent);
 
 const resources = [
-  { path: 'payments', Model: Payment, schema: paymentSchema },
-  { path: 'expenses', Model: Expense, schema: expenseSchema },
+  { path: 'payments', Model: Payment, schema: paymentSchema, updateSchema: paymentUpdateSchema },
+  { path: 'expenses', Model: Expense, schema: expenseSchema, updateSchema: expenseUpdateSchema },
 ];
 
-for (const { path, Model, schema } of resources) {
+for (const { path, Model, schema, updateSchema } of resources) {
   const { list, create, update, remove } = createResourceController(Model);
   router.get(`/${path}`, list);
   router.post(`/${path}`, validate(schema), create);
-  router.patch(`/${path}/:id`, update);
+  router.patch(`/${path}/:id`, validate(updateSchema), update);
   router.delete(`/${path}/:id`, remove);
 }
 

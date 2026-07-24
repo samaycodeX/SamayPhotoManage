@@ -9,8 +9,12 @@ export const SERVICE_TYPES = [
   'Candid',
   'Drone',
   'Cinematic',
+  'Reel',
   'Pre Wedding',
+  'Traditional Video',
   'Live Streaming',
+  'Album',
+  'Frame',
   'LED',
   'Other',
 ];
