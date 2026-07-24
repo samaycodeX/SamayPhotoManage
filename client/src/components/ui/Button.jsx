@@ -1,0 +1,34 @@
+import { forwardRef } from 'react';
+import { cn } from '../../lib/utils';
+
+const variants = {
+  primary: 'bg-accent text-white hover:bg-accent/90',
+  secondary: 'bg-white text-primary border border-border hover:bg-surface',
+  ghost: 'bg-transparent text-secondary hover:bg-surface hover:text-primary',
+  danger: 'bg-danger text-white hover:bg-danger/90',
+};
+
+const sizes = {
+  sm: 'h-8 px-3 text-sm',
+  md: 'h-9 px-4 text-sm',
+  lg: 'h-11 px-5 text-base',
+  icon: 'h-9 w-9',
+};
+
+export const Button = forwardRef(
+  ({ className, variant = 'primary', size = 'md', ...props }, ref) => (
+    <button
+      ref={ref}
+      className={cn(
+        'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40',
+        'disabled:pointer-events-none disabled:opacity-50',
+        variants[variant],
+        sizes[size],
+        className
+      )}
+      {...props}
+    />
+  )
+);
+Button.displayName = 'Button';

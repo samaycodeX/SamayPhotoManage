@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 const base = { timestamps: true };
 export const User = model('User', new Schema({email:{type:String,unique:true,required:true,lowercase:true},password:{type:String,required:true},financePin:{type:String,required:true}},base));
-export const Customer = model('Customer', new Schema({customerName:{type:String,required:true,trim:true},brideName:String,groomName:String,mobileNumber:{type:String,required:true},address:String},base));
+export const Customer = model('Customer', new Schema({customerName:{type:String,required:true,trim:true},mobileNumber:{type:String,required:true},address:String},base));
 const customerRef={type:Schema.Types.ObjectId,ref:'Customer',required:true,index:true};
 export const Event = model('Event', new Schema({customer:customerRef,type:{type:String,enum:['Wedding','Engagement','Haldi','Mehendi','Reception','Birthday','Baby Shower','Pre Wedding','Other'],required:true},date:{type:Date,required:true},time:String,venue:String},base));
 export const Service = model('Service', new Schema({customer:customerRef,name:{type:String,required:true},price:{type:Number,min:0,default:0},notes:String},base));
